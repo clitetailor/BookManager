@@ -26,7 +26,7 @@ let mongodbConnectHandler = (err, database) =>
 	});
 }
 
-let dbConnectURL = "http://localhost:27017/bookstore";
+let dbConnectURL = "mongodb://localhost:27017/bookstore";
 
 let connection = mongodb.MongoClient.connect(dbConnectURL, mongodbConnectHandler);
 

@@ -9,7 +9,11 @@
     "test": "ng test",
     "pree2e": "webdriver-manager update",
     "e2e": "protractor",
-    "db": "mongod --dbpath=./data"
+
+    "build": "ng build & copy server\\* dist",
+
+    "db": "mongod --dbpath=./data",
+    "server": "node dist/index.js"
   },
   "private": true,
   "dependencies": {
