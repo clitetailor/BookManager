@@ -7,40 +7,39 @@ let ObjectID = mongodb.ObjectID;
 
 let assert = require('assert');
 
-let app = express();
-app.use(express.static(__dirname));
-app.use(bodyParser.json());
 
 
+/**
+ * 
+ * @description Connect to database
+ * 
+ */
 
-mongodb.MongoClient.connect(process.env.MONGODB_URI, (err, database) =>
+let mongodbConnectHandler = (err, database) =>
 {
 	assert.equal(null, err, "Failed to connect to database");
-
-	process.exit(1);
-
-
 
 	let server = app.listen(process.env.PORT || 8080, () =>
 	{
 		let port = server.address().port;
 		console.log("App now running on port", port);
 	});
-})
-
-
-let handleError = (res, errlog, msg, code) =>
-{
-	assert(null, err, `ERROR: $(log)`);
-	res.status(code || 500).json({"err": msg})
 }
 
+let dbConnectURL = "http://localhost:27017/bookstore";
+
+let connection = mongodb.MongoClient.connect(dbConnectURL, mongodbConnectHandler);
 
 
-app.post("/contacts", (req, res) =>
-{
-	let newContact = req.body
-})
+/**
+ * 
+ * @description Setup app
+ * 
+ */
+
+let app = express();
+app.use(express.static(__dirname));
+app.use(bodyParser.json());
 
 
 app.get("/*", (req, res) =>
