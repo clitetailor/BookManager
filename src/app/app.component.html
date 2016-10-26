@@ -2,12 +2,23 @@
   {{title}}
 </h1>
 
-<table>
-  <tr>
-    <thead>Book Name</thead>
-    <thead>Author</thead>
-    <thead>Publishing Year</thead>
-    <thead>Pages</thead>
-    <thead>Id</thead>
-  </tr>
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Book Name</th>
+      <th>Author</th>
+      <th>Publishing Year</th>
+      <th>Pages</th>
+      <th>Id</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let book of books">
+      <td>{{book.title}}</td>
+      <td>{{book.author}}</td>
+      <td>{{book.year}}</td>
+      <td>{{book.pages}}</td>
+      <td>{{book._id}}</td>
+    </tr>
+  </tbody>
 </table>

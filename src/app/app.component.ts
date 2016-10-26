@@ -25,7 +25,7 @@ export class AppComponent implements OnInit {
     this.bookService.getBooks()
       .subscribe((books: Book[]) =>
       {
-        
+        this.books = books;
       });
   }
 }

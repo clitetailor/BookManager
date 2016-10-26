@@ -12,9 +12,14 @@ export class BookService {
 
   constructor(private http: Http) { }
 
-  insertBook(...book: Book[])
+  updateBook(book: Book)
   {
-    
+
+  }  
+
+  insertBook(book: Book)
+  {
+
   }
 
   getBooks()
