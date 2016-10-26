@@ -4,16 +4,19 @@
   "license": "MIT",
   "angular-cli": {},
   "scripts": {
-    "start": "ng serve",
     "lint": "tslint \"src/**/*.ts\"",
     "test": "ng test",
     "pree2e": "webdriver-manager update",
     "e2e": "protractor",
 
-    "build": "ng build & copy server\\* dist",
+    "build": "npm run build:ng && npm run build:server",
+    "build:server": "copy server\\* dist",
+    "build:ng": "ng build",
 
-    "db": "mongod --dbpath=./data",
-    "server": "node dist/index.js"
+    "start": "node dist/index.js",
+    
+    "db": "mongd --dbpath=./data",
+    "serve": "npm run build && npm run start"
   },
   "private": true,
   "dependencies": {
