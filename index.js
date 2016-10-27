@@ -7,8 +7,6 @@ let mongodb = require('mongodb');
 let ObjectID = mongodb.ObjectID;
 let MongoClient = mongodb.MongoClient;
 
-let assert = require('assert');
-
 
 const HTTP_OK = 200;
 const HTTP_INTERNAL_SERVER_ERROR = 500;
@@ -16,13 +14,45 @@ const HTTP_INTERNAL_SERVER_ERROR = 500;
 
 //Connect to database
 
+
 let dbConnectURL = "mongodb://localhost:27017/bookstore";
+
+let tryAgain = (connection) =>
+{
+	connection = MongoClient.connect(dbConnectURL);
+
+	connection.then(() =>
+	{
+		console.log("Connect to database successfully!");
+	})
+	.catch(err =>
+	{
+		console.error("ERROR: ", err);
+		console.log();
+
+		if (!connection)
+		{
+			setTimeout(() =>
+			{
+				tryAgain(connection);
+			}, 8000);
+		}
+	})
+}
+
+
+
 
 let connection = MongoClient.connect(dbConnectURL);
 
 connection.catch(err =>
 {
 	console.error(err);
+
+	if (!connection)
+	{
+		tryAgain(connection);
+	}
 });
 
 

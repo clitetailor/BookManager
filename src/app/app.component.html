@@ -1,85 +1,103 @@
 <div class="container">
   <div class="row">
-    <div class="page-header">
+    <div class="jumbotron">
       <h1>{{title}}</h1>
     </div>
   </div>
 
   <div class="row">
-    <div class="panel panel-default col-lg-12">
+    
+    <div class="col-lg-6">
 
-      <div class="panel-body">
-        <form>
-          <div class="form-group">
-            <label for="title">Title</label>
-            <input [(ngModel)]="selectedBook.title" name="title" type="text" class="form-control" required>
-          </div>
+      <div class="panel panel-success">
 
-          <div class="form-group">
-            <label for="author">Author</label>
-            <input [(ngModel)]="selectedBook.author" name="author" type="text" class="form-control" required>
-          </div>
+        <div class="panel-heading">
+          Form
+        </div>
 
-          <div class="form-group">
-            <label for="year">Publishing Year</label>
-            <input [(ngModel)]="selectedBook.year" name="year" type="text" class="form-control" required>
-          </div>
-
-          <div class="form-group">
-            <label for="pages">Pages</label>
-            <input [(ngModel)]="selectedBook.pages" name="pages" type="text" class="form-control" required>
-          </div>
-
-          <div class="form-group">
-            <div class="btn-toolbar">
-              <button type="submit" class="btn btn-primary" [disabled]="selected" (click)="onSubmit()">Submit</button>
-              <button class="btn btn-primary" [disabled]="!selected" (click)="onUpdate()">Update</button>
-              <button class="btn btn-danger" [disabled]="!selected" (click)="onDelete()">Delete</button>
+        <div class="panel-body">
+          <form #bookForm="ngForm">
+            <div class="form-group">
+              <label for="title">Title</label>
+              <input [(ngModel)]="selectedBook.title" name="title" type="text" class="form-control" required>
             </div>
-          </div>
 
-          <div class="form-group">
-            <template ngFor let-err="$implicit" let-i="index"  [ngForOf]="errors">
-              <div class="alert alert-danger">
-                <strong>ERROR:</strong> {{err}}
-                <button type="button" class="close pull-right" aria-label="Close" (click)="onRemoveErrorMsg(i)"><span aria-hidden="true">&times;</span></button>
+            <div class="form-group">
+              <label for="author">Author</label>
+              <input [(ngModel)]="selectedBook.author" name="author" type="text" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+              <label for="year">Publishing Year</label>
+              <input [(ngModel)]="selectedBook.year" name="year" type="text" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+              <label for="pages">Pages</label>
+              <input [(ngModel)]="selectedBook.pages" name="pages" type="text" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+              <div class="btn-toolbar">
+                <button *ngIf="!selected" type="submit" [disabled]="bookForm.form.invalid" class="btn btn-primary pull-right" (click)="onSubmit()">Submit</button>
+                <button *ngIf="selected" type="button" class="btn btn-danger pull-right" (click)="onDelete()">Delete</button>
+                <button *ngIf="selected" type="submit" [disabled]="bookForm.form.invalid" class="btn btn-primary pull-right" (click)="onUpdate()">Update</button>
               </div>
-            </template>
-          </div>
-        </form>
+            </div>
+
+            <div class="form-group">
+              <template ngFor let-err="$implicit" let-i="index"  [ngForOf]="errors">
+                <div class="alert alert-danger">
+                  <strong>ERROR:</strong> {{err}}
+                  <button type="button" class="close pull-right" aria-label="Close" (click)="onRemoveErrorMsg(i)"><span aria-hidden="true">&times;</span></button>
+                </div>
+              </template>
+            </div>
+          </form>
+        </div>
       </div>
 
     </div>
   </div>
-
   <div class="row">
-    <div class="panel panel-default col-lg-12">
+    <div class="col-lg-12">
 
-      <div class="panel-body">
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Author</th>
-              <th>Publishing Year</th>
-              <th>Pages</th>
-              <th>Id</th>
-            </tr>
-          </thead>
-          <tbody>
-            <template ngFor let-book="$implicit" [ngForOf]="books">
-              <tr (click)="onBookSelect(book)" [class.info]="book===this.selectedBook">
-                <td>{{book.title}}</td>
-                <td>{{book.author}}</td>
-                <td>{{book.year}}</td>
-                <td>{{book.pages}}</td>
-                <td>{{book._id}}</td>
+      <div class="panel panel-info">
+        
+        <div class="panel-heading">
+          Book Collection
+        </div>
+
+        <div class="panel-body">
+
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Publishing Year</th>
+                <th>Pages</th>
+                <th>Id</th>
               </tr>
-            </template>
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              <template ngFor let-book="$implicit" [ngForOf]="books">
+                <tr (click)="onBookSelect(book)" [class.info]="book===this.selectedBook">
+                  <td>{{book.title}}</td>
+                  <td>{{book.author}}</td>
+                  <td>{{book.year}}</td>
+                  <td>{{book.pages}}</td>
+                  <td>{{book._id}}</td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+
+        </div>
+        
       </div>
 
     </div>
+
   </div>
 </div>
