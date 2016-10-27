@@ -1,7 +1,12 @@
-export interface Book {
+export class Book {
+	constructor(
+		public title: String = "",
+		public author = "",
+		public year: String = undefined,
+		public pages: Number = undefined)
+	{
+		
+	}
+
 	_id?: String;
-	title: String;
-	author: String;
-	year: String;
-	pages: Number
 }

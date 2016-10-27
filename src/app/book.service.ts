@@ -14,18 +14,25 @@ export class BookService {
 
   updateBook(book: Book)
   {
-
+    return this.http.post(this.bookCollectionURL, book)
+      .toPromise()
+      .then(this.extractData)
+      .catch(this.handleError);
   }  
 
   insertBook(book: Book)
   {
-
+    return this.http.put(this.bookCollectionURL, book)
+      .toPromise()
+      .then(this.extractData)
+      .catch(this.handleError);
   }
 
   getBooks()
   {
     return this.http.get(this.bookCollectionURL)
-      .map(this.extractData)
+      .toPromise()
+      .then(this.extractData)
       .catch(this.handleError);
   }
 
@@ -49,7 +56,7 @@ export class BookService {
     {
       errMsg = error.message ? error.message : error.toString();
     }
-    console.error(errMsg);
-    return Observable.throw(errMsg);
+    
+    return Promise.reject(errMsg);
   }
 }

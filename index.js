@@ -86,5 +86,41 @@ app.get("/books", (req, res) =>
 
 app.post("/books", (req, res) =>
 {
-	
+	let response = (docs) =>
+	{
+		res.status(HTTP_OK).json(docs);
+	}
+
+	let updateBooks = (callback) =>
+	{
+		return (db) =>
+		{
+			db.collection('bookCollection').update();
+		}
+	}
+
+	connection.then(getBooks(response))
+		.catch(err => {handleError(err, res, HTTP_INTERNAL_SERVER_ERROR, "Failed to get books!")});
+})
+
+app.put("/books", (req, res) =>
+{
+	let response = (docs) =>
+	{
+		res.status(HTTP_OK).json(docs);
+	}
+
+	let getBooks = (callback) =>
+	{
+		return (db) =>
+		{
+			db.collection('bookCollection').find().toArray((err, docs) =>
+			{
+				callback(docs);
+			});
+		}
+	}
+
+	connection.then(getBooks(response))
+		.catch(err => {handleError(err, res, HTTP_INTERNAL_SERVER_ERROR, "Failed to get books!")});
 })

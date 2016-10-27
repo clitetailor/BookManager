@@ -12,6 +12,8 @@ export class AppComponent implements OnInit {
   title: String = 'Book Manager';
   books: Book[] = [];
 
+  selectedBook: Book = new Book();
+  selected: boolean = false;
 
   constructor(private bookService: BookService) { }
 
@@ -23,9 +25,55 @@ export class AppComponent implements OnInit {
   private getBooks()
   {
     this.bookService.getBooks()
-      .subscribe((books: Book[]) =>
+      .then((books: Book[]) =>
       {
         this.books = books;
       });
+  }
+
+  updateBook(book: Book)
+  {
+    this.bookService.updateBook(book)
+      .then((books: Book[]) =>
+      {
+        this.books = books;
+      });
+  }
+
+  insertBook(book: Book)
+  {
+    this.bookService.insertBook(book)
+      .then((books: Book[]) =>
+      {
+        this.books = books;
+      });
+  }
+
+
+  onBookSelect(book: Book)
+  {
+    if (!!this.selected)
+    {
+      this.selectedBook = new Book();
+      this.selected = false;
+    }
+    else
+    {
+      this.selectedBook = book;
+      this.selected = true;
+    }
+  }
+
+  onSubmit()
+  {
+    this.insertBook(this.selectedBook);
+    this.selectedBook = new Book();
+  }
+
+  onUpdate()
+  {
+    this.updateBook(this.selectedBook);
+    this.selectedBook = new Book();
+    this.selected = false;
   }
 }

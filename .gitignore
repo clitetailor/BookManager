@@ -39,3 +39,4 @@ data/
 
 # assets
 src/assets/bootstrap/*
+src/assets/jquery/*
