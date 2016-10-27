@@ -22,9 +22,8 @@ let connection = MongoClient.connect(dbConnectURL);
 
 connection.catch(err =>
 {
-	assert.equal(null, err, "Failed to connect to database!");
+	console.error(err);
 });
-
 
 
 
@@ -62,6 +61,12 @@ app.get("/", (req, res) =>
 
 
 
+
+
+
+
+
+
 app.get("/books", (req, res) =>
 {
 	let response = (docs) =>
@@ -84,43 +89,95 @@ app.get("/books", (req, res) =>
 		.catch(err => {handleError(err, res, HTTP_INTERNAL_SERVER_ERROR, "Failed to get books!")});
 });
 
-app.post("/books", (req, res) =>
-{
-	let response = (docs) =>
-	{
-		res.status(HTTP_OK).json(docs);
-	}
-
-	let updateBooks = (callback) =>
-	{
-		return (db) =>
-		{
-			db.collection('bookCollection').update();
-		}
-	}
-
-	connection.then(getBooks(response))
-		.catch(err => {handleError(err, res, HTTP_INTERNAL_SERVER_ERROR, "Failed to get books!")});
-})
-
 app.put("/books", (req, res) =>
 {
+	req.body._id = new ObjectID(req.body._id);
+
 	let response = (docs) =>
 	{
 		res.status(HTTP_OK).json(docs);
 	}
 
-	let getBooks = (callback) =>
+	let insertBook = (callback) =>
 	{
 		return (db) =>
 		{
-			db.collection('bookCollection').find().toArray((err, docs) =>
+			db.collection('bookCollection').insertOne(req.body, () =>
 			{
-				callback(docs);
+				db.collection('bookCollection').find().toArray((err, docs) =>
+				{
+					callback(docs);
+				});
 			});
 		}
 	}
 
-	connection.then(getBooks(response))
-		.catch(err => {handleError(err, res, HTTP_INTERNAL_SERVER_ERROR, "Failed to get books!")});
+	connection.then(insertBook(response))
+	.catch(err =>
+	{
+		handleError(err, res, HTTP_INTERNAL_SERVER_ERROR, "Failed to get books!");
+	});
+})
+
+
+
+
+app.post("/books/:id", (req, res) =>
+{
+	req.body._id = new ObjectID(req.params.id);
+
+	let response = (docs) =>
+	{
+		res.status(HTTP_OK).json(docs);
+	}
+
+	let updateBook = (callback) =>
+	{
+		return (db) =>
+		{
+			db.collection('bookCollection').updateOne({	_id: req.body._id }, req.body, { upsert: false }, () =>
+			{
+				db.collection('bookCollection').find().toArray((err, docs) =>
+				{
+					callback(docs);
+				});
+			});
+		}
+	}
+
+	connection.then(updateBook(response))
+		.catch(err =>
+		{
+			handleError(err, res, HTTP_INTERNAL_SERVER_ERROR, "Failed to update book!");
+		});
+})
+
+app.delete("/books/:id", (req, res) =>
+{
+	req.body._id = new ObjectID(req.params.id);req.params.id;
+
+	let response = (docs) =>
+	{
+		res.status(HTTP_OK).json(docs);
+	}
+
+	let deleteBook = (callback) =>
+	{
+		return (db) =>
+		{
+			db.collection('bookCollection').deleteOne({	_id: req.body._id }, () =>
+			{
+				db.collection('bookCollection').find().toArray((err, docs) =>
+				{
+					callback(docs);
+				});
+			});
+		}
+	}
+
+	connection.then(deleteBook(response))
+		.catch(err =>
+		{
+			handleError(err, res, HTTP_INTERNAL_SERVER_ERROR, "Failed to update book!");
+		});
 })

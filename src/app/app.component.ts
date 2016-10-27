@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { BookService } from './book.service';
 
 import { Book } from './book';
@@ -15,11 +15,24 @@ export class AppComponent implements OnInit {
   selectedBook: Book = new Book();
   selected: boolean = false;
 
-  constructor(private bookService: BookService) { }
+  errors: String[] = [];
+
+  constructor(private bookService: BookService, private ngZone: NgZone) { }
 
   ngOnInit()
   {
     this.getBooks();
+  }
+
+
+  private handleError(err)
+  {
+    this.errors.push(err);
+  }
+
+  onRemoveErrorMsg(id)
+  {
+    this.errors.splice(id);
   }
 
   private getBooks()
@@ -28,31 +41,44 @@ export class AppComponent implements OnInit {
       .then((books: Book[]) =>
       {
         this.books = books;
-      });
+      })
+      .catch(err => this.handleError(err));
   }
 
-  updateBook(book: Book)
+  private updateBook(book: Book)
   {
     this.bookService.updateBook(book)
       .then((books: Book[]) =>
       {
         this.books = books;
-      });
+      })
+      .catch(err => this.handleError(err));
   }
 
-  insertBook(book: Book)
+  private insertBook(book: Book)
   {
     this.bookService.insertBook(book)
       .then((books: Book[]) =>
       {
         this.books = books;
-      });
+      })
+      .catch(err => this.handleError(err));
+  }
+
+  private deleteBook(book: Book)
+  {
+    this.bookService.deleteBook(book)
+      .then((books: Book[]) =>
+      {
+        this.books = books;
+      })
+      .catch(err => this.handleError(err));
   }
 
 
   onBookSelect(book: Book)
   {
-    if (!!this.selected)
+    if (book === this.selectedBook)
     {
       this.selectedBook = new Book();
       this.selected = false;
@@ -73,6 +99,13 @@ export class AppComponent implements OnInit {
   onUpdate()
   {
     this.updateBook(this.selectedBook);
+    this.selectedBook = new Book();
+    this.selected = false;
+  }
+
+  onDelete()
+  {
+    this.deleteBook(this.selectedBook);
     this.selectedBook = new Book();
     this.selected = false;
   }

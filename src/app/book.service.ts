@@ -14,14 +14,15 @@ export class BookService {
 
   updateBook(book: Book)
   {
-    return this.http.post(this.bookCollectionURL, book)
+    return this.http.post(`${this.bookCollectionURL}\\${book._id}`, book)
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError);
-  }  
+  }
 
   insertBook(book: Book)
   {
+    console.log(book);
     return this.http.put(this.bookCollectionURL, book)
       .toPromise()
       .then(this.extractData)
@@ -36,6 +37,14 @@ export class BookService {
       .catch(this.handleError);
   }
 
+  deleteBook(book: Book)
+  {
+    return this.http.delete(`${this.bookCollectionURL}\\${book._id}`)
+      .toPromise()
+      .then(this.extractData)
+      .catch(this.handleError);
+  }
+
   private extractData(res: Response)
   {
     let body = res.json();
@@ -45,6 +54,8 @@ export class BookService {
   private handleError (error: Response | any)
   {
     let errMsg: string;
+
+    console.log(error);
 
     if (error instanceof Response)
     {
