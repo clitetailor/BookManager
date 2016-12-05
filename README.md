@@ -6,6 +6,11 @@ A simple Book Manager written in NodeJS
 Setup
 -----
 
+Install:
+```bash
+npm i
+```
+
 Build:
 ```bash
 npm run build
